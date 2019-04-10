@@ -72,7 +72,7 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
                 <?php foreach ($selectOrderItem as $item): ?>
                 <tr>
 
-                  <td><?php echo $item->product_quantity."x ". $item->product_name; ?></td>
+                  <td><?php echo $item->product_quantity."x ". $item->product_name ." [". $item->reference."]";?></td>
 
                 </tr>
               <?php endforeach; ?>
