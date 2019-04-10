@@ -26,7 +26,7 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
     <div class="container" style="text-align :center;top: 3rem;position: relative;">
 
 
-    <?php  if (isset($_GET['edit'])) {
+    <?php  if (isset($_GET['edit']) && ($_GET['edit'] == $idOrder ) ) {
         $id = $_GET['edit']; ?>
         <table border=1 class="table">
            <thead class="thead-dark">
@@ -59,7 +59,7 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
              <td><?php echo $info->payment  ?></td>
              <td><?php echo $info->firstname; ?></td>
              <td><?php $info->lastname; ?></td>
-             <td> <input type="text" name="edit" value="edit"> edit </td>
+             <td> <input type="text" name="edit" value="edit"> </td>
              <td><button type="submit" name="userEdit" class="btn btn-outline-primary"> modifier </button></td>
              </tr>
              </form>
