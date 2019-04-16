@@ -1,17 +1,16 @@
 <?php include 'header.php';
 
-
+//$infoMojp;
+$majNote = majNote();
 $client = selectClient();
 $infoPresta = selectInfoFromPresta();
+
 foreach ($infoPresta as $element) {
   $reference = $element->reference;
   $idOrder = $element->id_order;
   $idCustomer = $element->id_customer;
 }
 
-
-$selectOrderItem = selectOrderItem($idOrder,$reference);
-//$infoMojp = quiPrendTout();
 
  ?>
 <!DOCTYPE html>
@@ -30,10 +29,13 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
 
 
     <?php  if (isset($_GET['edit'])) {
-        $order = selectOrderItem($_GET['edit']); ?>
+        $order = selectOrderItem($_GET['edit']);
+        $infoMojp = selectInfoFromMojpById_Order($order);
+         ?>
         <table border=1 class="table">
            <thead class="thead-dark">
 
+             <th>Note</th>
              <th>Ajouter une note</th>
              <th>Modifier</th>
 
@@ -44,13 +46,16 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
              <input type="hidden" name="id" value="<?php echo $id; ?>"/>
            <tr>
 
+             <td><?php  ?></td>
              <td> <input type="text" name="edit" value="edit"> </td>
-             <td><button type="submit" name="userEdit"> modifier </button></td>
+             <td><button type="submit" name="noteEdit"> modifier </button></td>
 
              </tr>
              </form>
            <?php endforeach; ?>
-           <?php } elseif (isset($_GET['item'])) { ?>
+           <?php } elseif (isset($_GET['item'])) {
+             $reference = $_GET['item'];
+             $selectOrderItem = selectOrderItem($reference); ?>
              <table border=1 class="table">
                 <thead class="thead-dark">
                   <th>Item</th>
@@ -62,6 +67,7 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
 
                 </tr>
               <?php endforeach; ?>
+
 
             <?php } elseif (isset($_GET['customer'])) {
               $infoByCustomer = selectInfoFromPrestaById($_GET['customer']); ?>
@@ -88,7 +94,7 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
 
                   <td><?php echo $infocusto->reference ; ?></td>
                   <td><?php echo $infocusto->date_add; ?></td>
-                 <td> <button type="button"><a href="?item=<?php echo $infocusto->id_order; ?>"> Voir Item </a></button></td>
+                 <td> <button type="button"><a href="?item=<?php echo $infocusto->reference; ?>"> Voir Item </a></button></td>
                   <td><?php echo $infocusto->name; ?></td>
                   <td><?php echo ""; ?></td>
                   <td><?php echo $infocusto->total_paid ; ?></td>
@@ -127,7 +133,10 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
               </tr>
             <?php endforeach; ?>
             </table>
-     <?php }  ?>
+     <?php } if (isset($_GET['noteEdit'])) {
+       $majNote;
+       header("location:home.php");
+     }  ?>
    </div>
 </main>
 </html>

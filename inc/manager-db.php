@@ -8,12 +8,20 @@ function selectInfoFromPresta() {
     return $result->fetchAll();
 }
 
-function selectInfoFromPrestaById($idOrder) {
-    global $pdo;
-    $result = $pdo->prepare("SELECT * FROM ps_orders WHERE id_order = :idOrder");
-    $result->bindValue(':idOrder', $idOrder);
+function selectInfoFromMojpById_Order($order) {
+    global $pdoMojp;
+    $result = $pdoMojp->prepare("SELECT * FROM ldb_orders WHERE id_orders = :order");
+    $result->bindValue(':order', $order);
     $result->execute();
-    return $result->fetch();
+    return $result->fetchAll();
+}
+
+function selectInfoFromPrestaById($idCustomer) {
+    global $pdo;
+    $result = $pdo->prepare("SELECT * FROM ps_orders, ps_carrier WHERE id_customer = :idCustomer");
+    $result->bindValue(':idCustomer', $idCustomer);
+    $result->execute();
+    return $result->fetchALl();
 }
 
 function selectCustomer($idCustomer) {
@@ -22,6 +30,12 @@ function selectCustomer($idCustomer) {
     $result->bindValue(':id_customer', $idCustomer, PDO::PARAM_STR);
     $result->execute();
     return $result->fetch();
+}
+function selectClient() {
+    global $pdo;
+    $result = $pdo->prepare("SELECT * FROM ps_customer");
+    $result->execute();
+    return $result->fetchAll();
 }
 
 function selectCustomerAdress($idCustomer) {
@@ -38,12 +52,21 @@ function endsWith($haystack, $needle) {
     return $diff >= 0 && strpos($haystack, $needle, $diff) !== FALSE;
 }
 
+function majNote(){
+  global $pdoMojp;
+  if (isset($_GET['noteEdit'])){
+    $note = $_GET['edit'];
+    $requete_pop = "UPDATE ldb_orders SET notes = '".$note."'";
+    $sql = $pdoMojp->exec($requete_maj);
+    return $requete_maj;
+
+  }
+}
 
 // TODO: trouver la jointure pour selectionne les elements du panier du client
-function selectOrderItem($idOrder, $reference) {
+function selectOrderItem($reference) {
     global $pdo;
-    $result = $pdo->prepare("SELECT reference, product_name, product_quantity FROM ps_orders, ps_order_detail WHERE ps_order_detail.id_order = :id_order AND ps_orders.reference = :reference;");
-    $result->bindValue(':id_order', $idOrder, PDO::PARAM_STR);
+    $result = $pdo->prepare("SELECT * FROM ps_orders, ps_order_detail WHERE ps_orders.reference = :reference");
     $result->bindValue(':reference', $reference, PDO::PARAM_STR);
     $result->execute();
     return $result->fetchAll();
