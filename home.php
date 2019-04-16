@@ -1,9 +1,12 @@
 <?php include 'header.php';
 
+
+$client = selectClient();
 $infoPresta = selectInfoFromPresta();
 foreach ($infoPresta as $element) {
   $reference = $element->reference;
   $idOrder = $element->id_order;
+  $idCustomer = $element->id_customer;
 }
 
 
@@ -26,41 +29,24 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
     <div class="container" style="text-align :center;top: 3rem;position: relative;">
 
 
-    <?php  if (isset($_GET['edit']) && ($_GET['edit'] == $idOrder ) ) {
-        $id = $_GET['edit']; ?>
+    <?php  if (isset($_GET['edit'])) {
+        $order = selectOrderItem($_GET['edit']); ?>
         <table border=1 class="table">
            <thead class="thead-dark">
 
-             <th>Mail</th>
-             <th>reference</th>
-             <th>date_commande</th>
-             <th>Item</th>
-             <th>Transport</th>
-             <th>RR JP</th>
-             <th>prix</th>
-             <th>mode de paiement</th>
-             <th>nom</th>
-             <th>prénom</th>
-             <th>note</th>
-             <th>action</th>
+             <th>Ajouter une note</th>
+             <th>Modifier</th>
+
 
            </thead>
-           <?php foreach ($infoPresta as $info): ?>
+           <?php foreach ($order as $bop): ?>
            <form method="get" action="home.php" class="form-group">
-           <input type="hidden" name="id" value="<?php echo $id; ?>"/>
+             <input type="hidden" name="id" value="<?php echo $id; ?>"/>
            <tr>
-             <td><?php echo $info->email; ?></td>
-             <td><?php echo $info->reference ; ?></td>
-             <td><?php echo ""; ?></td>
-             <td><?php echo ""; ?></td>
-             <td><?php echo ""; ?></td>
-             <td><?php echo ""; ?></td>
-             <td><?php echo $info->total_paid ; ?></td>
-             <td><?php echo $info->payment  ?></td>
-             <td><?php echo $info->firstname; ?></td>
-             <td><?php $info->lastname; ?></td>
+
              <td> <input type="text" name="edit" value="edit"> </td>
-             <td><button type="submit" name="userEdit" class="btn btn-outline-primary"> modifier </button></td>
+             <td><button type="submit" name="userEdit"> modifier </button></td>
+
              </tr>
              </form>
            <?php endforeach; ?>
@@ -77,12 +63,13 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
                 </tr>
               <?php endforeach; ?>
 
-              <?php } else { ?>
+            <?php } elseif (isset($_GET['customer'])) {
+              $infoByCustomer = selectInfoFromPrestaById($_GET['customer']); ?>
 
                 <table border=1 class="table">
                    <thead class="thead-dark">
 
-                     <th>Mail</th>
+
                      <th>reference</th>
                      <th>date_commande</th>
                      <th>Item</th>
@@ -90,35 +77,55 @@ $selectOrderItem = selectOrderItem($idOrder,$reference);
                      <th>RR JP</th>
                      <th>prix</th>
                      <th>mode de paiement</th>
-                     <th>nom</th>
-                     <th>prénom</th>
                      <th>note</th>
                      <th>action</th>
 
                    </thead>
 
-                <?php foreach ($infoPresta as $info): ?>
+                <?php foreach ($infoByCustomer as $infocusto): ?>
                 <tr>
 
-                  <td><?php echo $info->email; ?></td>
-                  <td><?php echo $info->reference ; ?></td>
-                  <td><?php echo $info->date_add; ?></td>
-                 <td><a href="?item=<?php echo $info->id_order; ?>"> Item </a></td>
-                  <td><?php echo $info->name; ?></td>
+
+                  <td><?php echo $infocusto->reference ; ?></td>
+                  <td><?php echo $infocusto->date_add; ?></td>
+                 <td> <button type="button"><a href="?item=<?php echo $infocusto->id_order; ?>"> Voir Item </a></button></td>
+                  <td><?php echo $infocusto->name; ?></td>
                   <td><?php echo ""; ?></td>
-                  <td><?php echo $info->total_paid ; ?></td>
-                  <td><?php echo $info->payment ; ?></td>
-                  <td><?php echo $info->firstname; ?></td>
-                  <td><?php echo $info->lastname; ?></td>
+                  <td><?php echo $infocusto->total_paid ; ?></td>
+                  <td><?php echo $infocusto->payment ; ?></td>
                   <td>
-                  </button><a href="?edit=<?php echo $info->id_order;?>"> edit </a></button>
+                  <button type="submit"><a href="?edit=<?php echo $infocusto->id_order;?>"> Voir </a></button>
                   </td>
                   <td>
-                  </button><a href="?action=<?php echo $info->id_customer; ?>"> action </a></button>
+                  <button type="submit"><a href="?action=<?php echo $infocusto->id_customer; ?>"> edit </a></button>
                   </td>
 
                 </tr>
               <?php endforeach; ?>
+
+            <?php } else { ?>
+
+              <table border=1 class="table">
+                 <thead class="thead-dark">
+
+                   <th>Nom du Client</th>
+                   <th>Prénom du Client</th>
+                   <th>Voir</th>
+
+                 </thead>
+
+              <?php foreach ($client as $infoClient): ?>
+              <tr>
+
+
+                <td><?php echo $infoClient->firstname; ?></td>
+                <td><?php echo $infoClient->lastname; ?></td>
+                <td>
+                <button type="submit"><a href="?customer=<?php echo $infoClient->id_customer; ?>"> voir </a></button>
+                </td>
+
+              </tr>
+            <?php endforeach; ?>
             </table>
      <?php }  ?>
    </div>
