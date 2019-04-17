@@ -75,10 +75,33 @@ foreach ($infoPresta as $element) {
               }
               if ($id != $_GET["ajout"]) {
                 $addOrder = AjoutOrder($_GET['ajout']);
-              }
-              header("location:home.php");
+              } ?>
+                  <div class="alert alert-success" align="center">
+                      <strong>Super !</strong> vous avez ajouté de quoi commenter votre commande !
+                  </div>
 
-             ?>
+
+          <table border=1 class="table">
+             <thead class="thead-dark">
+
+               <th>Nom du Client</th>
+               <th>Prénom du Client</th>
+               <th>Voir</th>
+
+             </thead>
+
+          <?php foreach ($client as $infoClient): ?>
+          <tr>
+
+
+            <td><?php echo $infoClient->firstname; ?></td>
+            <td><?php echo $infoClient->lastname; ?></td>
+            <td>
+            <button type="submit"><a href="?customer=<?php echo $infoClient->id_customer; ?>"> voir </a></button>
+            </td>
+
+          </tr>
+        <?php endforeach; ?>
 
             <?php } elseif (isset($_GET['customer'])) {
               $infoByCustomer = selectInfoFromPrestaById($_GET['customer']); ?>
@@ -124,7 +147,12 @@ foreach ($infoPresta as $element) {
                 </tr>
               <?php endforeach; ?>
 
-            <?php } else { ?>
+            <?php } else {
+                  if (isset($_GET['ajout'])) {?>
+                      <div class="alert alert-success" align="center">
+                          <strong>Super !</strong> vous avez ajoutez de quoi commenter votre commande !
+                      </div>
+              <?php } ?>
 
               <table border=1 class="table">
                  <thead class="thead-dark">
