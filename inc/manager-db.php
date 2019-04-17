@@ -56,11 +56,19 @@ function majNote(){
   global $pdoMojp;
   if (isset($_GET['noteEdit'])){
     $note = $_GET['edit'];
-    $requete_pop = "UPDATE ldb_orders SET notes = '".$note."'";
-    $sql = $pdoMojp->exec($requete_maj);
-    return $requete_maj;
+    $result = "UPDATE ldb_orders SET notes = '".$note."'";
+    $sql = $pdoMojp->exec($result);
+    return $result;
 
   }
+}
+
+function AjoutOrder($order) {
+    global $pdoMojp;
+    $result = $pdoMojp->prepare("INSERT INTO ldb_orders VALUES ($order, '', '', '', '', '')");
+        $result->bindValue(":id_orders", $order);
+        $result->execute();
+        return $result;
 }
 
 // TODO: trouver la jointure pour selectionne les elements du panier du client
@@ -162,25 +170,4 @@ function quiPrendTout() {
         }
     }
     return false;
-}
-
-function AjoutOrder($idOrder, $email, $name, $adress, $date, $items, $carrier, $shipping, $reference) {
-    global $pdoMojp;
-    $stringItems = "";
-    foreach ($items as $item => $value) {
-        $stringItems .= $value;
-    }
-    $result = $pdoMojp->prepare("INSERT INTO ldb_orders VALUES ('', :idOrder, :Mail, :Name, :Adress, :date, :Item, :carrier, :shipping, :ref, '', '')");
-        $result->bindValue(":idOrder", $idOrder);
-        $result->bindValue(":Mail", $email);
-        $result->bindValue(":Name", $name);
-        $result->bindValue(":Adress", $adress);
-        $result->bindValue(":date", $date);
-        $result->bindValue(":Item", $stringItems);
-        $result->bindValue(":carrier", $carrier);
-        $result->bindValue(":shipping", $shipping);
-        $result->bindValue(":ref", $reference);
-        $result->execute();
-
-        return true;
 }

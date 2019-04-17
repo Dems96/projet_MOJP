@@ -1,6 +1,5 @@
 <?php include 'header.php';
 
-//$infoMojp;
 $majNote = majNote();
 $client = selectClient();
 $infoPresta = selectInfoFromPresta();
@@ -29,8 +28,11 @@ foreach ($infoPresta as $element) {
 
 
     <?php  if (isset($_GET['edit'])) {
-        $order = selectOrderItem($_GET['edit']);
+
+        $order = $_GET['edit'];
         $infoMojp = selectInfoFromMojpById_Order($order);
+        //$addOrder = AjoutOrder($order);
+        //$addOrder;
          ?>
         <table border=1 class="table">
            <thead class="thead-dark">
@@ -41,13 +43,13 @@ foreach ($infoPresta as $element) {
 
 
            </thead>
-           <?php foreach ($order as $bop): ?>
+           <?php foreach ($infoMojp as $bop): ?>
            <form method="get" action="home.php" class="form-group">
              <input type="hidden" name="id" value="<?php echo $id; ?>"/>
            <tr>
 
-             <td><?php  ?></td>
-             <td> <input type="text" name="edit" value="edit"> </td>
+             <td><?php echo $bop->notes; ?></td>
+             <td> <input type="text" name="edit" value="editer"> </td>
              <td><button type="submit" name="noteEdit"> modifier </button></td>
 
              </tr>
