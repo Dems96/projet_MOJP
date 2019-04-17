@@ -1,6 +1,5 @@
 <?php include 'header.php';
 
-$majNote = majNote();
 $client = selectClient();
 $infoPresta = selectInfoFromPresta();
 
@@ -27,13 +26,26 @@ foreach ($infoPresta as $element) {
     <div class="container" style="text-align :center;top: 3rem;position: relative;">
 
 
-    <?php  if (isset($_GET['edit'])) {
-
+    <?php/*  if (isset($_GET['edit'])) {
         $order = $_GET['edit'];
         $infoMojp = selectInfoFromMojpById_Order($order);
-        //$addOrder = AjoutOrder($order);
-        //$addOrder;
-         ?>
+
+
+         */?>
+       <?php if (isset($_GET['ajout'])) {
+         $count=countId($_GET['ajout']);
+         $infoMojp = selectInfoFromMojpById_Order($_GET['ajout']);
+         $idd = selectId($_GET['ajout']);
+         foreach ($idd as $value) {
+           $id = $value->id_orders;
+         }
+         if ($count != $_GET["ajout"]) {
+           $addOrder = AjoutOrder($_GET['ajout']);
+           header("location:home.php?ajout=".$_GET['ajout']);
+
+         }
+
+        ?>
         <table border=1 class="table">
            <thead class="thead-dark">
 
@@ -45,7 +57,7 @@ foreach ($infoPresta as $element) {
            </thead>
            <?php foreach ($infoMojp as $bop): ?>
            <form method="get" action="home.php" class="form-group">
-             <input type="hidden" name="id" value="<?php echo $id; ?>"/>
+             <input type="hidden" name="id" value="<?php echo $order; ?>"/>
            <tr>
 
              <td><?php echo $bop->notes; ?></td>
@@ -55,6 +67,7 @@ foreach ($infoPresta as $element) {
              </tr>
              </form>
            <?php endforeach; ?>
+
            <?php } elseif (isset($_GET['item'])) {
              $reference = $_GET['item'];
              $selectOrderItem = selectOrderItem($reference); ?>
@@ -71,6 +84,18 @@ foreach ($infoPresta as $element) {
               <?php endforeach; ?>
 
 
+            <?php }elseif (isset($_GET['ajout'])) {
+              $idd = selectId($_GET['ajout']);
+              foreach ($idd as $value) {
+                $id = $value->id_orders;
+              }
+              if ($id != $_GET["ajout"]) {
+                $addOrder = AjoutOrder($_GET['ajout']);
+              }
+              header("location:home.php");
+
+             ?>
+
             <?php } elseif (isset($_GET['customer'])) {
               $infoByCustomer = selectInfoFromPrestaById($_GET['customer']); ?>
 
@@ -86,6 +111,7 @@ foreach ($infoPresta as $element) {
                      <th>prix</th>
                      <th>mode de paiement</th>
                      <th>note</th>
+                     <th>Ajouter une note</th>
                      <th>action</th>
 
                    </thead>
@@ -102,7 +128,10 @@ foreach ($infoPresta as $element) {
                   <td><?php echo $infocusto->total_paid ; ?></td>
                   <td><?php echo $infocusto->payment ; ?></td>
                   <td>
-                  <button type="submit"><a href="?edit=<?php echo $infocusto->id_order;?>"> Voir </a></button>
+                  <button type="submit"><a href="?edit=<?php echo $infocusto->id_order;?>"> Voir/Modifier Notes </a></button>
+                  </td>
+                  <td>
+                  <button type="submit"><a href="?ajout=<?php echo $infocusto->id_order;?>">  Ajouter Notes </a></button>
                   </td>
                   <td>
                   <button type="submit"><a href="?action=<?php echo $infocusto->id_customer; ?>"> edit </a></button>
@@ -136,7 +165,7 @@ foreach ($infoPresta as $element) {
             <?php endforeach; ?>
             </table>
      <?php } if (isset($_GET['noteEdit'])) {
-       $majNote;
+       $majNote = majNote($_GET['id'], $_GET['ajout']);
        header("location:home.php");
      }  ?>
    </div>

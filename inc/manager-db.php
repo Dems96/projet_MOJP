@@ -52,15 +52,21 @@ function endsWith($haystack, $needle) {
     return $diff >= 0 && strpos($haystack, $needle, $diff) !== FALSE;
 }
 
-function majNote(){
-  global $pdoMojp;
-  if (isset($_GET['noteEdit'])){
-    $note = $_GET['edit'];
-    $result = "UPDATE ldb_orders SET notes = '".$note."'";
-    $sql = $pdoMojp->exec($result);
-    return $result;
+function selectId($order) {
+    global $pdoMojp;
+    $result = $pdoMojp->prepare("SELECT `id_orders` FROM ldb_orders WHERE id_orders = :order");
+    $result->bindValue(':order', $order);
+    $result->execute();
+    return $result->fetchAll();
+}
 
-  }
+function majNote($idorder, $note){
+  global $pdoMojp;
+    $result = $pdoMojp->prepare("UPDATE ldb_orders SET notes = :note WHERE id_orders = :id; ");
+    $result->bindValue(':id', $idorder, PDO::PARAM_STR);
+    $result->bindValue(':note', $note, PDO::PARAM_STR);
+    $result->execute();
+    return $result;
 }
 
 function AjoutOrder($order) {
@@ -170,4 +176,12 @@ function quiPrendTout() {
         }
     }
     return false;
+}
+function countId($idOrder){
+  global $pdoMojp;
+  $verifOrderExist = $pdoMojp->prepare("SELECT COUNT(*) as commandExist FROM ldb_orders");
+    $verifOrderExist->execute();
+    $countOrderExists = $verifOrderExist->fetch();
+    $nb_ligne=$countOrderExists->commandExist;
+    return $nb_ligne;
 }
