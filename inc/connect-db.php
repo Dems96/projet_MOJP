@@ -1,7 +1,7 @@
 <?php
-$dbnamePresta = "prestashop";
-$passPresta = "";
-$idPresta = "root";
+$dbnamePresta = $_POST['dbname'];
+$passPresta = $_POST['password'];
+$idPresta = $_POST['id'];
 $dbnameMojp = "mojp";
 $passMojp = "";
 $idMojp = "root";

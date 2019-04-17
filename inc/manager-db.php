@@ -2,7 +2,6 @@
 require_once 'connect-db.php';
 function selectInfoFromPresta() {
     global $pdo;
-    //global $pdoMojp;
    $result = $pdo->prepare("SELECT * FROM ps_orders, ps_customer, ps_carrier LIMIT 0,100;");
     $result->execute();
     return $result->fetchAll();
