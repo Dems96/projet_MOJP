@@ -26,26 +26,11 @@ foreach ($infoPresta as $element) {
     <div class="container" style="text-align :center;top: 3rem;position: relative;">
 
 
-    <?php/*  if (isset($_GET['edit'])) {
+    <?php  if (isset($_GET['edit'])) {
         $order = $_GET['edit'];
+        $verifId = selectId($order);
         $infoMojp = selectInfoFromMojpById_Order($order);
-
-
-         */?>
-       <?php if (isset($_GET['ajout'])) {
-         $count=countId($_GET['ajout']);
-         $infoMojp = selectInfoFromMojpById_Order($_GET['ajout']);
-         $idd = selectId($_GET['ajout']);
-         foreach ($idd as $value) {
-           $id = $value->id_orders;
-         }
-         if ($count != $_GET["ajout"]) {
-           $addOrder = AjoutOrder($_GET['ajout']);
-           header("location:home.php?ajout=".$_GET['ajout']);
-
-         }
-
-        ?>
+         ?>
         <table border=1 class="table">
            <thead class="thead-dark">
 
@@ -67,7 +52,6 @@ foreach ($infoPresta as $element) {
              </tr>
              </form>
            <?php endforeach; ?>
-
            <?php } elseif (isset($_GET['item'])) {
              $reference = $_GET['item'];
              $selectOrderItem = selectOrderItem($reference); ?>
@@ -98,7 +82,7 @@ foreach ($infoPresta as $element) {
 
             <?php } elseif (isset($_GET['customer'])) {
               $infoByCustomer = selectInfoFromPrestaById($_GET['customer']); ?>
-
+              <h1> Les 100 dernières commandes </h1>
                 <table border=1 class="table">
                    <thead class="thead-dark">
 
@@ -165,7 +149,7 @@ foreach ($infoPresta as $element) {
             <?php endforeach; ?>
             </table>
      <?php } if (isset($_GET['noteEdit'])) {
-       $majNote = majNote($_GET['id'], $_GET['ajout']);
+       $majNote = majNote($_GET['id'], $_GET['edit']);
        header("location:home.php");
      }  ?>
    </div>
